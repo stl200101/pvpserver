@@ -3457,6 +3457,45 @@ CreatureAI* GetAI_npc_event_fireworks(Creature* pCreature)
     return new npc_event_fireworksAI(pCreature);
 }
 
+/// Custom npc for PvP Premade teleporter
+#define PREMADE_TELEPORTER_ACCEPT_INVITIATION "Accept invitation"
+#define PREMADE_TELEPORTER_LEAVE_ISLAND "Bring me home"
+#define PREMADE_TELEPORTER_GOSSIP_MENU_TEXT 50010
+#define PREMADE_TELEPORTER_LEAVE_EVENT_TEXT 50011
+#define ENTRY_PREMADE_TELEPORTER_BACK_TELEPORTER 1000010
+
+static const WorldLocation m_PremadeZone(0, -1852.000000f, -4145.000000f, 11.000000f, 0.241081f);
+
+bool GossipHello_npc_premade_teleporter(Player* p_Player, Creature* p_Creature)
+{
+    if (p_Creature->GetEntry() == ENTRY_PREMADE_TELEPORTER_BACK_TELEPORTER)
+    {
+        p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, PREMADE_TELEPORTER_LEAVE_ISLAND, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        p_Player->SEND_GOSSIP_MENU(PREMADE_TELEPORTER_LEAVE_EVENT_TEXT, p_Creature->GetGUID());
+    }
+    else
+    {
+        p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, PREMADE_TELEPORTER_ACCEPT_INVITIATION, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        p_Player->SEND_GOSSIP_MENU(PREMADE_TELEPORTER_GOSSIP_MENU_TEXT, p_Creature->GetGUID());
+    }
+    return true;
+}
+
+bool GossipSelect_npc_premade_teleporter(Player* p_Player, Creature* p_Creature, uint32 /*uiSender*/, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        if (p_Creature->GetEntry() == ENTRY_PREMADE_TELEPORTER_BACK_TELEPORTER)
+            p_Player->TeleportToHomebind();
+        else
+            p_Player->TeleportTo(m_PremadeZone);
+    }
+
+    p_Player->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
+
 void AddSC_npcs_special()
 {
     Script *newscript;
@@ -3628,4 +3667,12 @@ void AddSC_npcs_special()
     newscript->Name = "npc_event_fireworks";
     newscript->GetAI = &GetAI_npc_event_fireworks;
     newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_premade_teleporter";
+    newscript->pGossipHello = &GossipHello_npc_premade_teleporter;
+    newscript->pGossipSelect = &GossipSelect_npc_premade_teleporter;
+    newscript->RegisterSelf();
+
+
 }
