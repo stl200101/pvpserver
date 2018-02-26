@@ -3463,7 +3463,7 @@ CreatureAI* GetAI_npc_event_fireworks(Creature* pCreature)
 #define PVP_TELEPORTER_LEAVE_ISLAND "Teleport me to Arathi Highlands"
 #define PVP_TELEPORTER_GOSSIP_MENU_TEXT 60010
 #define PVP_TELEPORTER_LEAVE_EVENT_TEXT 60011
-#define ENTRY_PVP_TELEPORTER_BACK_TELEPORTER 2000010
+#define ENTRY_PVP_TELEPORTER_BACK_TELEPORTER 2000020
 
 static const WorldLocation m_BackToPremadeZone(0, -1852.000000f, -4145.000000f, 11.000000f, 0.241081f);
 static const WorldLocation m_GurubashiArena(0, -13233.059570f, 218.713669f, 31.868229f, 1.079525f);
@@ -3487,21 +3487,12 @@ bool GossipHello_npc_pvp_teleporter(Player* p_Player, Creature* p_Creature)
 
 bool GossipSelect_npc_pvp_teleporter(Player* p_Player, Creature* p_Creature, uint32 /*uiSender*/, uint32 uiAction)
 {
-	if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
-	{
-		if (p_Creature->GetEntry() == ENTRY_PVP_TELEPORTER_BACK_TELEPORTER)
-			p_Player->TeleportTo(m_BackToPremadeZone);
-		else
-			p_Player->TeleportTo(m_GurubashiArena);
-	}
-
-	if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
-	{
-		if (p_Creature->GetEntry() == ENTRY_PVP_TELEPORTER_BACK_TELEPORTER)
-			p_Player->TeleportTo(m_BackToPremadeZone);
-		else
-			p_Player->TeleportTo(m_DuelZone);
-	}
+	if ((uiAction == GOSSIP_ACTION_INFO_DEF + 1) && !(p_Creature->GetEntry() == ENTRY_PVP_TELEPORTER_BACK_TELEPORTER))
+         p_Player->TeleportTo(m_GurubashiArena);
+	else if ((uiAction == GOSSIP_ACTION_INFO_DEF + 2) && !(p_Creature->GetEntry() == ENTRY_PVP_TELEPORTER_BACK_TELEPORTER))
+		 p_Player->TeleportTo(m_DuelZone);
+	else
+         p_Player->TeleportTo(m_BackToPremadeZone);
 
 	p_Player->CLOSE_GOSSIP_MENU();
 	return true;
