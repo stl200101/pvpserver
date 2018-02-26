@@ -767,6 +767,7 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder *holder)
             pCurrChar->KillPlayer();
     }
     pCurrChar->restorePendingTeleport();
+	pCurrChar->UpdateSkillsForLevel();
 
     sObjectMgr.UpdatePlayerCachedPosition(pCurrChar);
 
