@@ -4849,7 +4849,11 @@ void Player::RepopAtGraveyard()
             GetTransport()->RemovePassenger(this);
             ResurrectPlayer(1.0f);
         }
-        TeleportTo(ClosestGrave->map_id, ClosestGrave->x, ClosestGrave->y, ClosestGrave->z, GetOrientation(), 0, std::move(recover));
+		// Custom graveyard for Arathi 
+		if ((GetZoneId() == 45) && (getLevel() == 60))
+			TeleportTo(0, -1852.000000f, -4145.000000f, 11.000000f, 0.241081f);
+		else
+            TeleportTo(ClosestGrave->map_id, ClosestGrave->x, ClosestGrave->y, ClosestGrave->z, GetOrientation(), 0, std::move(recover));
     }
 }
 
@@ -6442,6 +6446,17 @@ void Player::UpdateZone(uint32 newZone, uint32 newArea)
             break;
     }
 
+    /// Premade Zone
+    if (zoneEntry->Id == 37)
+        pvpInfo.inHostileArea = false;
+
+    /// Hackfix for Arathi
+    if (zoneEntry->Id == 45)
+    {
+        pvpInfo.inHostileArea = false;
+        UpdatePvP(false, true);
+    }
+
     if (pvpInfo.inHostileArea)                              // in hostile area
     {
         if ((!IsPvP() && !IsTaxiFlying()) || pvpInfo.endTimer != 0)
@@ -6605,9 +6620,21 @@ void Player::DuelComplete(DuelCompleteType type)
     duel->opponent->SetGuidValue(PLAYER_DUEL_ARBITER, ObjectGuid());
     duel->opponent->SetUInt32Value(PLAYER_DUEL_TEAM, 0);
 
+    // Restoring full HP/Mana 
+    duel->opponent->RemoveAllSpellCooldown();
+    duel->opponent->SetHealth(duel->opponent->GetMaxHealth());
+    duel->opponent->SetPower(POWER_MANA, duel->opponent->GetMaxPower(POWER_MANA));
+    duel->opponent->SetPower(POWER_ENERGY, duel->opponent->GetMaxPower(POWER_ENERGY));
+
+    RemoveAllSpellCooldown();
+    SetHealth(GetMaxHealth());
+    SetPower(POWER_MANA, GetMaxPower(POWER_MANA));
+    SetPower(POWER_ENERGY, GetMaxPower(POWER_ENERGY));
+
     if (duel->opponent->duel)
-        duel->opponent->duel->finished = true;;
+        duel->opponent->duel->finished = true;
     duel->finished = true;
+
 }
 
 //---------------------------------------------------------//
