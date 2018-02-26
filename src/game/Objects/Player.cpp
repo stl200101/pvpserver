@@ -4849,9 +4849,13 @@ void Player::RepopAtGraveyard()
             GetTransport()->RemovePassenger(this);
             ResurrectPlayer(1.0f);
         }
-		// Custom graveyard for Arathi 
+		// Custom graveyards for Arathi & STV
 		if ((GetZoneId() == 45) && (getLevel() == 60))
 			TeleportTo(0, -1852.000000f, -4145.000000f, 11.000000f, 0.241081f);
+		else if ((GetZoneId() == 33) && (getLevel() == 60) && (GetTeam() == ALLIANCE))
+			TeleportTo(0, -13209.500977f, 221.450607f, 33.236431f, 2.956571f);
+		else if ((GetZoneId() == 33) && (getLevel() == 60) && (GetTeam() == HORDE))
+			TeleportTo(0, -13243.445312f, 239.786072f, 33.232769f, 5.375592f);
 		else
             TeleportTo(ClosestGrave->map_id, ClosestGrave->x, ClosestGrave->y, ClosestGrave->z, GetOrientation(), 0, std::move(recover));
     }
