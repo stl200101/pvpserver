@@ -3487,12 +3487,21 @@ bool GossipHello_npc_pvp_teleporter(Player* p_Player, Creature* p_Creature)
 
 bool GossipSelect_npc_pvp_teleporter(Player* p_Player, Creature* p_Creature, uint32 /*uiSender*/, uint32 uiAction)
 {
-	if ((uiAction == GOSSIP_ACTION_INFO_DEF + 1) && !(p_Creature->GetEntry() == ENTRY_PVP_TELEPORTER_BACK_TELEPORTER))
-         p_Player->TeleportTo(m_GurubashiArena);
-	else if ((uiAction == GOSSIP_ACTION_INFO_DEF + 2) && !(p_Creature->GetEntry() == ENTRY_PVP_TELEPORTER_BACK_TELEPORTER))
-		 p_Player->TeleportTo(m_DuelZone);
-	else
-         p_Player->TeleportTo(m_BackToPremadeZone);
+
+	switch (uiAction)
+	{	
+
+	case GOSSIP_ACTION_INFO_DEF+1:
+		if (p_Creature->GetEntry() == ENTRY_PVP_TELEPORTER_BACK_TELEPORTER)
+			p_Player->TeleportTo(m_BackToPremadeZone);
+		else
+		    p_Player->TeleportTo(m_GurubashiArena);
+		break;
+
+	case GOSSIP_ACTION_INFO_DEF+2:
+		p_Player->TeleportTo(m_DuelZone);
+		break;
+	}
 
 	p_Player->CLOSE_GOSSIP_MENU();
 	return true;
