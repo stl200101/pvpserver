@@ -3467,7 +3467,7 @@ CreatureAI* GetAI_npc_event_fireworks(Creature* pCreature)
 
 static const WorldLocation m_BackToPremadeZone(0, -1852.000000f, -4145.000000f, 11.000000f, 0.241081f);
 static const WorldLocation m_GurubashiArena(0, -13233.059570f, 218.713669f, 31.868229f, 1.079525f);
-static const WorldLocation m_DuelZone(1, 6541.375703f, 4257.195312f, 658.283213f, 1.481669f);
+static const WorldLocation m_DuelZone(1, 6541.345703f, -4257.195312f, 658.283213f, 1.481669f);
 
 bool GossipHello_npc_pvp_teleporter(Player* p_Player, Creature* p_Creature)
 {
