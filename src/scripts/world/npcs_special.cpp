@@ -3460,6 +3460,7 @@ CreatureAI* GetAI_npc_event_fireworks(Creature* pCreature)
 ///  PvP-Teleporter from current mall to Gurubashi Arena
 #define PVP_TELEPORTER_ARENA "Teleport me to Gurubashi Arena"
 #define PVP_TELEPORTER_DUEL "Teleport me to Duel Zone"
+#define PVP_TELEPORTER_MAUL "Teleport me to Maul Arena"
 #define PVP_TELEPORTER_LEAVE_ISLAND "Teleport me to Arathi Highlands"
 #define PVP_TELEPORTER_GOSSIP_MENU_TEXT 60010
 #define PVP_TELEPORTER_LEAVE_EVENT_TEXT 60011
@@ -3468,6 +3469,7 @@ CreatureAI* GetAI_npc_event_fireworks(Creature* pCreature)
 static const WorldLocation m_BackToPremadeZone(0, -1852.000000f, -4145.000000f, 11.000000f, 0.241081f);
 static const WorldLocation m_GurubashiArena(0, -13233.059570f, 218.713669f, 31.868229f, 1.079525f);
 static const WorldLocation m_DuelZone(1, 6541.345703f, -4257.195312f, 658.283213f, 1.481669f);
+static const WorldLocation m_MaulArena(1, -3751.197998f, 1042.882568f, 162.423111f, 1.543312f);
 
 bool GossipHello_npc_pvp_teleporter(Player* p_Player, Creature* p_Creature)
 {
@@ -3480,6 +3482,7 @@ bool GossipHello_npc_pvp_teleporter(Player* p_Player, Creature* p_Creature)
 	{
 		p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, PVP_TELEPORTER_ARENA, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
 		p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, PVP_TELEPORTER_DUEL, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+		p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, PVP_TELEPORTER_MAUL, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
 		p_Player->SEND_GOSSIP_MENU(PVP_TELEPORTER_GOSSIP_MENU_TEXT, p_Creature->GetGUID());
 	}
 	return true;
@@ -3500,6 +3503,10 @@ bool GossipSelect_npc_pvp_teleporter(Player* p_Player, Creature* p_Creature, uin
 
 	case GOSSIP_ACTION_INFO_DEF+2:
 		p_Player->TeleportTo(m_DuelZone);
+		break;
+
+	case GOSSIP_ACTION_INFO_DEF + 3:
+		p_Player->TeleportTo(m_MaulArena);
 		break;
 	}
 
