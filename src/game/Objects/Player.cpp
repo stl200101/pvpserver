@@ -4405,7 +4405,7 @@ void Player::DeleteOldCharacters(uint32 keepDays)
 void Player::BuildPlayerRepop()
 {
     // Waiting to Resurrect (probably redundant cast, yet to check thoroughly)
-    if (InBattleGround())
+    if (InBattleGround() || (GetZoneId() == 33))
         CastSpell(this, 2584, true);
 
     //this is spirit release confirm?

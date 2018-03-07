@@ -1651,7 +1651,7 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
                         if (Unit* caster = GetCaster())
                         {
                             if (Player* player = caster->ToPlayer())
-                                if (!player->InBattleGround())
+                                if (!player->InBattleGround() || (!player->GetZoneId() == 33))
                                     player->RemoveAurasDueToSpell(2584);
                         }
                         return;
