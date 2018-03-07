@@ -61,6 +61,8 @@ struct stv_npc_spirit_guideAI : ScriptedAI
 		if (uiTimerRez < uiDiff)
 		{
 			m_creature->InterruptNonMeleeSpells(true);
+			m_creature->CastSpell(m_creature, SPELL_SPIRIT_HEAL, true);
+			m_creature->CastSpell(m_creature, SPELL_SPIRIT_HEAL_CHANNEL, false);
 			sLog.outString("Fuck you Steezy");
 			uiTimerRez = 30000;
 		}
@@ -82,7 +84,10 @@ struct stv_npc_spirit_guideAI : ScriptedAI
 		{
 			Player* pPlayer = itr->getSource();
 			if (!pPlayer || !pPlayer->IsWithinDistInMap(m_creature, 20.0f) || !pPlayer->HasAura(SPELL_WAITING_TO_RESURRECT) || pPlayer->isAlive())
+			{
+				sLog.outString("Checking the player's list");
 				continue;
+			}
 
 			// repop player again - now this node won't be counted and another node is searched
 			pPlayer->RepopAtGraveyard();
@@ -113,8 +118,6 @@ struct stv_npc_spirit_guideAI : ScriptedAI
 
 bool GossipHello_stv_npc_spirit_guide(Player* pPlayer, Creature* pCreature)
 {
-	if (pPlayer && pPlayer->IsWithinDistInMap(pCreature, 20.0f) && !pPlayer->isAlive())
-		pPlayer->ResurrectPlayer(0.0f);
 	pPlayer->CastSpell(pPlayer, SPELL_WAITING_TO_RESURRECT, true);
 	return true;
 }
