@@ -124,14 +124,6 @@ CreatureAI* GetAI_stv_npc_spirit_guide(Creature* pCreature)
 	return new stv_npc_spirit_guideAI(pCreature);
 }
 
-enum
-{
-	SPELL_SPAWN_EFFECT = 23235,
-	SPELL_BUFF_ALLIANCE_15 = 23033,
-	SPELL_BUFF_HORDE_15 = 23033,
-	SPELL_BUFF_ALLIANCE_10 = 23574,
-	SPELL_BUFF_HORDE_10 = 23033,
-};
 
 /*######
 ## mob_yenniku
