@@ -6187,8 +6187,8 @@ void Spell::EffectSpiritHeal(SpellEffectIndex /*eff_idx*/)
         return;
 
     // no resurrection on a GY other than homie if BG is not in progress
-    if (player->GetBattleGround()->GetStatus() != STATUS_IN_PROGRESS && !player->isGameMaster())
-        player->RepopAtGraveyard();
+    // if (player->GetBattleGround()->GetStatus() != STATUS_IN_PROGRESS && !player->isGameMaster())
+    //   player->RepopAtGraveyard();
 
     player->RemoveAurasDueToSpell(2584);
     player->ResurrectPlayer(1.0f);

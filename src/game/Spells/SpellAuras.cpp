@@ -1645,7 +1645,7 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
             {
                 switch (GetId())
                 {
-                    case 2584:                              // Waiting to Resurrect
+                    /* case 2584:                              // Waiting to Resurrect
                     {
                         // for cases where aura would re-apply and player is no longer in BG
                         if (Unit* caster = GetCaster())
@@ -1655,7 +1655,7 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
                                     player->RemoveAurasDueToSpell(2584);
                         }
                         return;
-                    }
+                    } */
                     case 10255:                             // Stoned
                     {
                         if (Unit* caster = GetCaster())

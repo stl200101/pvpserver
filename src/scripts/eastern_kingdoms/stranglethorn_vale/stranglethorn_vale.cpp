@@ -26,107 +26,6 @@ mob_yenniku
 EndContentData */
 
 #include "scriptPCH.h"
-#include "Spell.h"
-
-enum
-{
-	SPELL_SPIRIT_HEAL_CHANNEL = 22011,                // Spirit Heal Channel
-	SPELL_SPIRIT_HEAL = 22012,                        // Spirit Heal
-	SPELL_SPIRIT_HEAL_MANA = 44535,                   // in battlegrounds player get this no-mana-cost-buff
-	SPELL_WAITING_TO_RESURRECT = 2584                 // players who cancel this aura don't want a resurrection
-};
-
-struct stv_npc_spirit_guideAI : ScriptedAI
-{
-	explicit stv_npc_spirit_guideAI(Creature* pCreature) : ScriptedAI(pCreature)
-	{
-		uiTimerRez = 0;
-
-		stv_npc_spirit_guideAI::Reset();
-	}
-
-	void Reset() override
-	{
-	}
-
-	uint32 uiTimerRez;
-
-	uint32 GetData(uint32 /*type*/) override
-	{
-		return uiTimerRez;
-	}
-
-	void UpdateAI(const uint32 uiDiff) override
-	{
-		if (uiTimerRez < uiDiff)
-		{
-			m_creature->InterruptNonMeleeSpells(true);
-			m_creature->CastSpell(m_creature, SPELL_SPIRIT_HEAL, true);
-			m_creature->CastSpell(m_creature, SPELL_SPIRIT_HEAL_CHANNEL, false);
-			sLog.outString("Fuck you Steezy");
-			uiTimerRez = 30000;
-		}
-		else
-			uiTimerRez -= uiDiff;
-	}
-
-	void CorpseRemoved(uint32 &) override
-	{
-		// TODO: would be better to cast a dummy spell
-		Map* pMap = m_creature->GetMap();
-
-		if (!pMap)
-			return;
-
-		Map::PlayerList const &PlayerList = pMap->GetPlayers();
-
-		for (Map::PlayerList::const_iterator itr = PlayerList.begin(); itr != PlayerList.end(); ++itr)
-		{
-			Player* pPlayer = itr->getSource();
-			if (!pPlayer || !pPlayer->IsWithinDistInMap(m_creature, 20.0f) || !pPlayer->HasAura(SPELL_WAITING_TO_RESURRECT) || pPlayer->isAlive())
-			{
-				sLog.outString("Checking the player's list");
-				continue;
-			}
-
-			// repop player again - now this node won't be counted and another node is searched
-			pPlayer->RepopAtGraveyard();
-		}
-	}
-
-	void AttackedBy(Unit* /*pWho*/) override
-	{
-	}
-
-	void AttackStart(Unit* /*pWho*/) override
-	{
-	}
-
-	bool IsVisibleFor(Unit const* pViewer, bool &visible) const override
-	{
-		if (m_creature->IsFriendlyTo(pViewer))
-			return false;
-		visible = false;
-		return true;
-	}
-
-	void DamageTaken(Unit* /*pFrom*/, uint32 &damage) override
-	{
-		damage = 0;
-	}
-};
-
-bool GossipHello_stv_npc_spirit_guide(Player* pPlayer, Creature* pCreature)
-{
-	pPlayer->CastSpell(pPlayer, SPELL_WAITING_TO_RESURRECT, true);
-	return true;
-}
-
-CreatureAI* GetAI_stv_npc_spirit_guide(Creature* pCreature)
-{
-	return new stv_npc_spirit_guideAI(pCreature);
-}
-
 
 /*######
 ## mob_yenniku
@@ -745,12 +644,6 @@ CreatureAI* GetAI_npc_witch_doctor_unbagwa(Creature* pCreature)
 void AddSC_stranglethorn_vale()
 {
     Script *newscript;
-
-	newscript = new Script;
-	newscript->Name = "stv_npc_spirit_guide";
-	newscript->GetAI = &GetAI_stv_npc_spirit_guide;
-	newscript->pGossipHello = &GossipHello_stv_npc_spirit_guide;
-	newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "mob_yenniku";

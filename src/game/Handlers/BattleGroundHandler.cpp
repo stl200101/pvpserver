@@ -573,9 +573,9 @@ void WorldSession::HandleAreaSpiritHealerQueryOpcode(WorldPacket & recv_data)
 {
     DEBUG_LOG("WORLD: CMSG_AREA_SPIRIT_HEALER_QUERY");
 
-    BattleGround *bg = _player->GetBattleGround();
-    if (!bg)
-        return;
+ //   BattleGround *bg = _player->GetBattleGround();
+ //   if (!bg)
+ //     return;
 
     ObjectGuid guid;
     recv_data >> guid;
